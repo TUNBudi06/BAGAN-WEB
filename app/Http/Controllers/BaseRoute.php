@@ -17,4 +17,19 @@ class BaseRoute extends Controller
 
         return view('Base.Index',['name'=>'Bagan Default']);
     }
+
+    public function editBagan(string $id)
+    {
+
+    }
+
+    public function updateBagan(string $id)
+    {
+
+    }
+
+    public function deleteBagan(string $id)
+    {
+
+    }
 }

@@ -16,6 +16,7 @@
         "laravel-vite-plugin": "^2.0",
         "lucide": "^0.545.0",
         "tailwindcss": "^4.1.14",
+        "toastr": "^2.1.4",
         "vite": "^7.0.4"
     },
     "optionalDependencies": {

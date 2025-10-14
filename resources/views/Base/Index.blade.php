@@ -11,7 +11,7 @@
 
 @section('Body-HTML')
     {{-- Navbar --}}
-    <nav class="w-full bg-white dark:bg-gray-800 shadow-md mb-4">
+    <nav class="w-full bg-white dark:bg-gray-800 shadow-md mb-4" x-data="{ mobileMenuOpen: false }">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 {{-- Logo & Brand --}}
@@ -22,35 +22,28 @@
                     </a>
                 </div>
 
-                {{-- Center Menu --}}
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ url('/') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                        Home
-                    </a>
-                    <a href="{{ url('/departments') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                        Departments
-                    </a>
-                    <a href="{{ url('/employees') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                        Employees
-                    </a>
+                <div>
+                    <button @click="openList = ! openList" class="px-3 py-2 m-1 min-w-50 text-right justify-between bg-transparent outline-2 outline-blue-600 hidden md:inline-flex">
+                        {{$name}}
+                        <span>
+                            <i data-lucide="chevron-up" class="rotate-90 ml-1 data-[open=true]:rotate-180" data-open=""></i>
+                        </span>
+                    </button>
                 </div>
 
                 {{-- Right Side: Search & Menu Button --}}
-                <div class="flex items-center gap-4">
-                    {{-- Search Bar --}}
-                    <div class="hidden sm:block">
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="Search..."
-                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                        >
-                    </div>
-
-                    {{-- Hamburger Menu Button --}}
+                <div class="flex items-center gap-4" x-data="{ openList: false }">
+                    @guest
+                        <a href="{{ route('login') }}" class="px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition">Login</a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 transition">Register</a>
+                        @endif
+                    @else
+                        <a href="{{route('admin')}}" class="px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition">Admin Panel</a>
+                    @endguest
                     <button
-                        id="menuToggle"
-                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                        @click="mobileMenuOpen = !mobileMenuOpen"
+                        class="p-2 rounded-md md:hidden hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                         aria-label="Toggle Menu"
                     >
                         <svg class="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,24 +55,9 @@
         </div>
 
         {{-- Mobile Menu (hidden by default) --}}
-        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 dark:border-gray-700">
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden border-t border-gray-200 dark:border-gray-700">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Home
-                </a>
-                <a href="{{ url('/departments') }}" class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Departments
-                </a>
-                <a href="{{ url('/employees') }}" class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Employees
-                </a>
-                <div class="px-3 py-2">
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                    >
-                </div>
+
             </div>
         </div>
     </nav>
@@ -87,7 +65,6 @@
     {{-- Header with Title --}}
     <header class="w-full mb-2 pt-2 relative">
         <h1 class="text-3xl font-bold text-center">{{$name}}</h1>
-        <i data-lucide="tally-3" class="absolute right-0 top-0 size-10 mt-3 rotate-90 data-[open=true]:rotate-0" data-open="false"></i>
     </header>
 
     {{-- OrgChart Container --}}
@@ -100,23 +77,10 @@
         var bagan = document.getElementById("BaganJS");
 
         $(document).ready(function() {
-            // Toggle mobile menu
-            $('#menuToggle').click(function() {
-                $('#mobileMenu').toggleClass('hidden');
-            });
-
-            // Search functionality
-            $('#searchInput').on('input', function() {
-                var searchTerm = $(this).val().toLowerCase();
-                if (chart && searchTerm) {
-                    chart.searchUI.find(searchTerm);
-                }
-            });
-
             // Initialize OrgChart
             chart = new OrgChart(bagan, {
                 template: "rony",
-                mouseScrool: OrgChart.action.none,
+                mouseScrool: OrgChart.action.pan,
                 scaleInitial: OrgChart.match.boundary,
                 enableSearch: true,
                 tags: {

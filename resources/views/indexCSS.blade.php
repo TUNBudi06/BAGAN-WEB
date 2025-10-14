@@ -23,7 +23,11 @@
         @yield('other-head')
     @endif
 </head>
-<body class="relative bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f5f5f5] font-sans py-2 px-2">
+@hasSection('Body-HTML')
+    <body class="relative bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f5f5f5] text-center  font-sans py-2 px-2">
     @yield('Body-HTML')
-</body>
+    </body>
+@else
+    @yield("HTML")
+@endif
 </html>
