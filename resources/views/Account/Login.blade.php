@@ -26,5 +26,6 @@
             <livewire:loginform />
         </div>
     </main>
+@livewireScripts
 </body>
 @endsection

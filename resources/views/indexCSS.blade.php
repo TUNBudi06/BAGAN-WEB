@@ -19,6 +19,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 
+    @livewireStyles
+
     @hasSection('other-head')
         @yield('other-head')
     @endif
@@ -26,6 +28,7 @@
 @hasSection('Body-HTML')
     <body class="relative bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f5f5f5] text-center  font-sans py-2 px-2">
     @yield('Body-HTML')
+    @livewireScripts
     </body>
 @else
     @yield("HTML")

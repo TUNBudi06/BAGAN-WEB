@@ -13,7 +13,7 @@ $login = function () {
 
     if (Auth::attempt(['username' => $this->username, 'password' => $this->password], $this->remember)) {
         request()->session()->regenerate();
-        return redirect()->intended(route('admin'));
+        return redirect()->intended(route('base'));
     }
 
     throw ValidationException::withMessages([
