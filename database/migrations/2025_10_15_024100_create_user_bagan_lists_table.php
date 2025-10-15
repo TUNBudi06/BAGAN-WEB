@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('template_bagans', function (Blueprint $table) {
+        Schema::create('user_bagan_lists', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('template')->unique();
+            $table->string('nama');
+            $table->string('jabatan');
+            $table->string('departemen');
+            $table->string('image_path')->nullable();
+            $table->string('telephone')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('template_bagans');
+        Schema::dropIfExists('user_bagan_lists');
     }
 };

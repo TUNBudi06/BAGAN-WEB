@@ -19,7 +19,7 @@ Route::prefix('account')->group(function () {
     Route::post('logout',[AdminController::class,'logout'])->name('logout');
 });
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('dashboard',[AdminController::class,'index'])->name('admin');
 });
 

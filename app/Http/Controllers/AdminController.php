@@ -10,7 +10,7 @@ class AdminController extends Controller
     //
     public function index()
     {
-
+        return view('AdminPages.Dashboard');
     }
 
     public function logout(Request $request)

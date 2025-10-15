@@ -6,6 +6,7 @@
 
 @section('HTML')
 <body class="w-full h-screen justify-content-center items-center flex bg-gradient-to-br from-blue-400 to-pink-500">
+    <livewire:toastnotification />
     <main class="w-full xl:px-100 lg:px-60 md:px-40 sm:px-20 px-10 flex justify-center items-center">
         <div class="bg-white pt-3 px-5 w-full h-120 rounded-3xl drop-shadow-2xl">
             <div class="justify-between flex">
@@ -26,6 +27,7 @@
             <livewire:loginform />
         </div>
     </main>
+    @stack('scripts')
 @livewireScripts
 </body>
 @endsection

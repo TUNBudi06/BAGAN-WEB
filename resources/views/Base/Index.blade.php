@@ -5,7 +5,7 @@
 @endsection
 
 @section('other-head')
-    <script src="{{ asset('js/jquery-3.7.1.slim.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('js/orgchart.js') }}"></script>
 @endsection
 

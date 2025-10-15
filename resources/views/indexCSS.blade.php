@@ -19,8 +19,6 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 
-    <link href="{{asset('js/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
-
     @livewireStyles
 
     @hasSection('other-head')
@@ -30,8 +28,9 @@
 @hasSection('Body-HTML')
     <body class="relative bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f5f5f5] text-center  font-sans py-2 px-2">
     @yield('Body-HTML')
+    <livewire:toastnotification />
+    @stack('scripts')
     @livewireScripts
-    <script src="{{asset('js/toastr/toastr.min.css')}}}"></script>
     </body>
 @else
     @yield("HTML")

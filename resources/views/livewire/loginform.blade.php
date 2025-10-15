@@ -10,11 +10,26 @@ rules(['username' => 'required|string', 'password' => 'required|string']);
 
 $login = function () {
     $this->validate();
-
     if (Auth::attempt(['username' => $this->username, 'password' => $this->password], $this->remember)) {
         request()->session()->regenerate();
+        $this->dispatch('Notify', [
+            'type' => 'success',
+            'message' => 'Login successful! Welcome back.',
+            'positionClass' => 'toast-top-right',
+            'closeButton' => true,
+            'progressBar' => true,
+        ]);
+        sleep(1);
         return redirect()->intended(route('base'));
     }
+
+    $this->dispatch('Notify', [
+        'type' => 'error',
+        'message' => 'Login failed! Please check your credentials and try again.',
+        'positionClass' => 'toast-top-right',
+        'closeButton' => true,
+        'progressBar' => true,
+    ]);
 
     throw ValidationException::withMessages([
         'username' => __('The provided credentials do not match our records.'),
