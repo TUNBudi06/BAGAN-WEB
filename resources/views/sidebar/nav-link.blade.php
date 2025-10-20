@@ -1,0 +1,3 @@
+<a href="{{route('admin')}}" class="block px-3 py-2 data-[nav=true]:bg-gray-200 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-nav="{{request()->routeIs('admin') ? 'true' : 'false'}}">Users</a>
+<a href="{{route('bagan-list')}}" class="block px-3 py-2 data-[nav=true]:bg-gray-200 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-nav="{{request()->routeIs('bagan-list') ? 'true' : 'false'}}">Bagan List</a>
+<a href="#" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>

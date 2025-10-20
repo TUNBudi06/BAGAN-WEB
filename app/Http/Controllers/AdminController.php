@@ -22,4 +22,14 @@ class AdminController extends Controller
 
         return redirect()->route('base')->with('success', 'You have been logged out successfully.');
     }
+
+    public function BaganList()
+    {
+        return view('AdminPages.baganListView');
+    }
+
+    public function BaganeEdit(string $id)
+    {
+        return view('AdminPages.BaganEdit',['id'=>$id]);
+    }
 }

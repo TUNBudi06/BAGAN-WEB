@@ -21,5 +21,7 @@ Route::prefix('account')->group(function () {
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('dashboard',[AdminController::class,'index'])->name('admin');
+    Route::get('BaganList',[AdminController::class,'BaganList'])->name('bagan-list');
+    Route::get('BaganeEdit/{id}',[AdminController::class,'BaganeEdit'])->name('bagan-edit');
 });
 

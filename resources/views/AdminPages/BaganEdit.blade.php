@@ -24,7 +24,7 @@
             </div>
 
             <nav class="px-2 py-3 space-y-1">
-            @include('sidebar.nav-link')
+                @include('sidebar.nav-link')
             </nav>
 
             <div class="mt-6 p-4 border-t border-gray-100 dark:border-gray-700">
@@ -50,7 +50,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
-                        <h1 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 dark:text-white truncate">User List</h1>
+                        <h1 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 dark:text-white truncate">Bagan List</h1>
                     </div>
 
                     <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
@@ -60,22 +60,9 @@
             </header>
 
             <main class="flex-1 p-3 sm:p-4 lg:p-6 w-full min-w-0 space-y-4 sm:space-y-6 overflow-x-hidden">
-                <div class="w-full max-w-full">
-                    <div class="overflow-x-auto sm:overflow-visible">
-                        <livewire:user.userlist />
-                    </div>
-                </div>
-                <div class="w-full max-w-full">
-                    <div class="overflow-x-auto sm:overflow-visible">
-                        <livewire:user.tableuserlistbagan />
-                    </div>
-                </div>
+
             </main>
         </div>
-
-        <!-- Edit modal - positioned at root level for proper z-index -->
-        <div class="relative z-50">
-            <livewire:user.edituserlistbagan />
-        </div>
     </div>
+
 @endsection
