@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class templateBagan extends Model
+class SubLevels extends Model
 {
-    protected $table = 'template_bagans';
     protected $fillable = [
+        'bagan_list_id',
         'name',
-        'template',
-        'type',
+        'value',
     ];
 }

@@ -27,64 +27,79 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Card 1',
                 'template' => 'olivia',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 2',
                 'template' => 'diva',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 3',
                 'template' => 'mila',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 4',
                 'template' => 'polina',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 5',
                 'template' => 'mery',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 6',
                 'template' => 'rony',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 7',
                 'template' => 'belinda',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 8',
                 'template' => 'ula',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 9',
                 'template' => 'ana',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 10',
                 'template' => 'isla',
+                'type' => 'card',
             ],
             [
                 'name' => 'Card 11',
                 'template' => 'deborah',
+                'type' => 'card',
             ],
 
             // Type entries - semuanya di template column
             [
                 'name' => 'group',
                 'template' => 'group',
+                'type' => 'type',
             ],
             [
                 'name' => 'base',
                 'template' => 'base',
+                'type' => 'type',
             ],
             [
                 'name' => 'assistant',
                 'template' => 'assistant',
+                'type' => 'type',
             ],
             [
                 'name' => 'partner',
                 'template' => 'partner',
+                'type' => 'type',
             ],
         ]);
     }

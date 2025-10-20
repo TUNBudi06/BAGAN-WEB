@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('template_bagans', function (Blueprint $table) {
+        Schema::create('sub_levels', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('bagan_list_id');
+            $table->foreign('bagan_list_id')->references('id')->on('bagan_lists')->onDelete('cascade');
             $table->string('name');
-            $table->string('template');
-            $table->enum('type',['type', 'card'])->default('card');
+            $table->integer('value');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('template_bagans');
+        Schema::dropIfExists('sub_levels');
     }
 };
