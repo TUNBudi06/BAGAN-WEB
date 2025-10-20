@@ -14,5 +14,6 @@ class UserBaganList extends Model
         'image_path',
         'telephone',
         'email',
+        'tanggal_lahir',
     ];
 }

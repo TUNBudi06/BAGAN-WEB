@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('template_bagans', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('template');
-            $table->timestamps();
+        Schema::table("user_bagan_lists", function (Blueprint $table) {
+            $table->string('tanggal_lahir')->nullable()->after('email');
         });
     }
 
@@ -24,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('template_bagans');
+        //
     }
 };

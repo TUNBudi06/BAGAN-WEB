@@ -30,6 +30,7 @@
     @yield('Body-HTML')
     <livewire:toastnotification />
     @stack('scripts')
+    @stack('scripts-def')
     @livewireScripts
     </body>
 @else
