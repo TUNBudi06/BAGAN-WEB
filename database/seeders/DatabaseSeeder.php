@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\BaganList;
 use App\Models\templateBagan;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -79,12 +80,42 @@ class DatabaseSeeder extends Seeder
                 'template' => 'deborah',
                 'type' => 'card',
             ],
-
+            [
+                'name' => 'Departemen Banner Biru',
+                'template' => 'departemen-banner-biru',
+                'type' => 'card',
+            ],
+            [
+                'name' => 'Departemen Banner Hijau',
+                'template' => 'departemen-banner-hijau',
+                'type' => 'card',
+            ],
+            [
+                'name' => 'Departemen Banner Merah',
+                'template' => 'departemen-banner-merah',
+                'type' => 'card',
+            ],
             // Type entries - semuanya di template column
             [
-                'name' => 'group',
-                'template' => 'group',
-                'type' => 'type',
+                'name' => 'group (1 column)',
+                'template' => 'group-1',
+                'type' => 'card',
+            ],[
+                'name' => 'group (2 column)',
+                'template' => 'group-2',
+                'type' => 'card',
+            ],[
+                'name' => 'group (3 column)',
+                'template' => 'group-3',
+                'type' => 'card',
+            ],[
+                'name' => 'group (4 column)',
+                'template' => 'group-4',
+                'type' => 'card',
+            ],[
+                'name' => 'group (5 column)',
+                'template' => 'group-5',
+                'type' => 'card',
             ],
             [
                 'name' => 'base',
@@ -100,7 +131,19 @@ class DatabaseSeeder extends Seeder
                 'name' => 'partner',
                 'template' => 'partner',
                 'type' => 'type',
+            ],[
+                'name' => 'left-partner',
+                'template' => 'left-partner',
+                'type' => 'type',
+            ],[
+                'name' => 'right-partner',
+                'template' => 'right-partner',
+                'type' => 'type',
             ],
+        ]);
+
+        BaganList::insert([
+            'name' => 'Bagan Organisasi Perusahaan',
         ]);
     }
 }

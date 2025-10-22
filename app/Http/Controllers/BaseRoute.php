@@ -3,43 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\BaganList;
 
 class BaseRoute extends Controller
 {
     //
     public function index()
     {
-        return redirect()->route('show-bagan', ['id' => 'default']);
+        // Get first bagan or redirect to default
+        $firstBagan = BaganList::first();
+        $defaultId = $firstBagan ? $firstBagan->id : 1;
+
+        return redirect()->route('show-bagan', ['id' => $defaultId]);
     }
 
     public function showBagan(string $id, Request $request)
     {
-        // Sample list of available bagans - replace with database query later
-        $bagans = [
-            ['id' => 'default', 'name' => 'Bagan Default'],
-            ['id' => 'management', 'name' => 'Management Structure'],
-            ['id' => 'it-department', 'name' => 'IT Department'],
-            ['id' => 'marketing', 'name' => 'Marketing Team'],
-            ['id' => 'sales', 'name' => 'Sales Division'],
-            ['id' => 'hr', 'name' => 'Human Resources'],
-            ['id' => 'finance', 'name' => 'Finance Department'],
-            ['id' => 'operations', 'name' => 'Operations Team'],
-            ['id' => 'customer-service', 'name' => 'Customer Service'],
-            ['id' => 'product', 'name' => 'Product Development'],
-            ['id' => 'engineering', 'name' => 'Engineering Team'],
-            ['id' => 'legal', 'name' => 'Legal Department'],
-            ['id' => 'admin', 'name' => 'Administration'],
-            ['id' => 'research', 'name' => 'Research & Development'],
-            ['id' => 'procurement', 'name' => 'Procurement'],
-        ];
+        // Get all bagans from database
+        $bagans = BaganList::select('id', 'name')->get()->toArray();
 
-        // Find current bagan name
-        $currentBagan = collect($bagans)->firstWhere('id', $id);
-        $name = $currentBagan ? $currentBagan['name'] : 'Bagan Default';
+        // If no bagans found, show error or create default
+        if (empty($bagans)) {
+            abort(404, 'No organization charts found. Please create one in admin panel.');
+        }
+
+        // Find current bagan
+        $currentBagan = BaganList::find($id);
+
+        // If bagan not found, redirect to first bagan
+        if (!$currentBagan) {
+            $firstBagan = BaganList::first();
+            return redirect()->route('show-bagan', ['id' => $firstBagan->id]);
+        }
 
         return view('Base.Index', [
-            'name' => $name,
-            'currentId' => $id,
+            'name' => $currentBagan->name,
+            'currentId' => (int)$id,
             'bagans' => $bagans
         ]);
     }

@@ -70,8 +70,8 @@ new class extends Component {
 
 <div>
     <div class="mb-4">
-        <h2 class="text-xl font-semibold text-gray-900">Data User Bagan</h2>
-        <p class="text-sm text-gray-600">Daftar semua user dalam sistem bagan organisasi</p>
+        <h2 class="text-xl font-semibold text-gray-900">Data Member Bagan</h2>
+        <p class="text-sm text-gray-600">Daftar semua Member dalam sistem bagan organisasi</p>
     </div>
 
     <div class="bg-white shadow-sm rounded-lg overflow-hidden p-4 w-full">
@@ -82,8 +82,8 @@ new class extends Component {
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Departemen</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIK</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                 </tr>
@@ -110,13 +110,13 @@ new class extends Component {
                             <div class="text-sm font-medium text-gray-900">{{ $user->nama }}</div>
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
-                                {{ $user->jabatan }}
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                                {{ $user->nik }}
                             </span>
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-                                {{ $user->departemen }}
+                                {{ $user->team }}
                             </span>
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
@@ -167,7 +167,7 @@ new class extends Component {
         pageLength: 25,
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
         language: {
-            "emptyTable": "Tidak ada data user bagan",
+            "emptyTable": "Tidak ada data member bagan",
             "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
             "infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
             "infoFiltered": "(difilter dari _MAX_ total data)",

@@ -182,56 +182,6 @@
 
     {{-- OrgChart Container --}}
     <div class="relative max-w-full max-h-screen h-screen w-screen">
-        <div id="BaganJS" class="w-full h-full"></div>
+        @livewire('bagan.chartviewtemplate', ['idData' => $currentId])
     </div>
-
-    <script>
-        let chart;
-        var bagan = document.getElementById("BaganJS");
-
-        $(document).ready(function() {
-            // Initialize OrgChart
-            chart = new OrgChart(bagan, {
-                template: "rony",
-                mouseScrool: OrgChart.action.pan,
-                scaleInitial: OrgChart.match.boundary,
-                enableSearch: true,
-                tags: {
-                    "Management": {
-                        template: "rony"
-                    },
-                    "Marketing Manager": {
-                        template: "polina"
-                    },
-                    "IT Manager": {
-                        template: "ana"
-                    },
-                    "IT": {
-                        template: "ula"
-                    },
-                    "Marketing": {
-                        template: "belinda"
-                    }
-                },
-                nodeBinding: {
-                    field_0: "name",
-                    field_1: "title",
-                    img_0: "img"
-                },
-                nodes: [
-                    { id: 1, tags: ["Management"], name: "Amber McKenzie", title: "CEO", img: "https://cdn.balkan.app/shared/1.jpg" },
-                    { id: 2, pid: 1, tags: ["IT Manager"], name: "Ava Field", title: "IT Manager", img: "https://cdn.balkan.app/shared/2.jpg" },
-                    { id: 3, pid: 1, tags: ["Marketing Manager"], name: "Rhys Harper", title: "Marketing Team Lead", img: "https://cdn.balkan.app/shared/3.jpg" },
-                    { id: 4, pid: 2, tags: ["IT"], name: "Carol Foster", title: "Junior Developer", img: "https://cdn.balkan.app/shared/4.jpg" },
-                    { id: 5, pid: 2, tags: ["IT"], name: "Blake Morris", title: "Senior Developer", img: "https://cdn.balkan.app/shared/5.jpg" },
-                    { id: 6, pid: 3, tags: ["Marketing"], name: "Erin Grant", title: "Junior Marketing", img: "https://cdn.balkan.app/shared/6.jpg" },
-                    { id: 7, pid: 3, tags: ["Marketing"], name: "Avery Hughes", title: "Senior Marketing", img: "https://cdn.balkan.app/shared/7.jpg" }
-                ]
-            });
-
-            $(window).on('resize', function() {
-                chart.fit();
-            });
-        });
-    </script>
 @endsection

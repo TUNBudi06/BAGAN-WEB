@@ -16,22 +16,12 @@ new class extends Component {
     public string $nama = "";
 
     #[Validate(['required', 'string', 'max:255'])]
-    public string $jabatan = "";
+    public string $team = "";
 
-    #[Validate(['required', 'string', 'max:255'])]
-    public string $departemen = "";
+    public string $nik = "";
 
     #[Validate(['nullable', 'image', 'max:2048','extensions:jpg,jpeg,png,gif'])]
     public $image;
-
-    #[Validate(['nullable', 'string', 'max:20'])]
-    public string $telephone = "";
-
-    #[Validate(['nullable', 'email', 'max:255'])]
-    public string $email = "";
-
-    #[Validate(['nullable', 'date', 'before:today'])]
-    public string $tanggal_lahir = "";
 
     public ?string $currentImagePath = null;
 
@@ -55,11 +45,8 @@ new class extends Component {
             $user = UserBaganList::find($this->userId);
             if ($user) {
                 $this->nama = $user->nama;
-                $this->jabatan = $user->jabatan;
-                $this->departemen = $user->departemen;
-                $this->telephone = $user->telephone ?? '';
-                $this->email = $user->email ?? '';
-                $this->tanggal_lahir = $user->tanggal_lahir ?? '';
+                $this->team = $user->team;
+                $this->nik = $user->nik;
                 $this->currentImagePath = $user->image_path;
             }
         }
@@ -68,12 +55,16 @@ new class extends Component {
     public function closeModal()
     {
         $this->modalOpen = false;
-        $this->reset(['nama', 'jabatan', 'departemen', 'image', 'telephone', 'email', 'tanggal_lahir', 'userId', 'currentImagePath']);
+        $this->reset(['nama', 'team', 'nik', 'image', 'userId', 'currentImagePath']);
     }
 
     public function save()
     {
-        $this->validate();
+        $this->validate([
+            'nama' => 'required|string|max:255',
+            'team' => 'required|string|max:255',
+            'nik' => 'required|string|max:50|unique:user_bagan_lists,nik,' . $this->userId,
+        ]);
 
         if (!$this->userId) {
             $this->dispatch('notify', [
@@ -97,9 +88,7 @@ new class extends Component {
         try {
             $imagePath = $this->currentImagePath;
 
-            // Handle new image upload
             if ($this->image) {
-                // Delete old image if exists
                 if ($this->currentImagePath) {
                     \Storage::disk('public')->delete($this->currentImagePath);
                 }
@@ -108,12 +97,9 @@ new class extends Component {
 
             $user->update([
                 'nama' => $this->nama,
-                'jabatan' => $this->jabatan,
-                'departemen' => $this->departemen,
+                'team' => $this->team,
+                'nik' => $this->nik,
                 'image_path' => $imagePath,
-                'telephone' => $this->telephone,
-                'email' => $this->email,
-                'tanggal_lahir' => $this->tanggal_lahir,
             ]);
 
             $this->dispatch('notify', [
@@ -123,8 +109,6 @@ new class extends Component {
             ]);
 
             $this->closeModal();
-
-            // Dispatch events after modal is closed to ensure proper timing
             $this->dispatch('RefreshUserBaganList');
             $this->dispatch('reloadDataTable');
 
@@ -184,26 +168,26 @@ new class extends Component {
                             @error('nama') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Jabatan Field -->
+                        <!-- NIK Field -->
                         <div>
-                            <label for="jabatan" class="flex justify-start text-sm font-medium text-gray-700 mb-2">
-                                Jabatan <span class="text-red-500">*</span>
+                            <label for="nik" class="flex justify-start text-sm font-medium text-gray-700 mb-2">
+                                NIK (Nomor Induk Kerja) <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="jabatan" wire:model="jabatan"
+                            <input type="text" id="nik" wire:model="nik"
                                    class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                   placeholder="Contoh: Manager, Staff, Direktur"/>
-                            @error('jabatan') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                   placeholder="Contoh: 123456"/>
+                            @error('nik') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Departemen Field -->
+                        <!-- Team Field -->
                         <div>
-                            <label for="departemen" class="flex justify-start text-sm font-medium text-gray-700 mb-2">
-                                Departemen <span class="text-red-500">*</span>
+                            <label for="team" class="flex justify-start text-sm font-medium text-gray-700 mb-2">
+                                Team <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="departemen" wire:model="departemen"
+                            <input type="text" id="team" wire:model="team"
                                    class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                    placeholder="Contoh: IT, Marketing, Finance"/>
-                            @error('departemen') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                            @error('team') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Image Upload Field -->
@@ -212,7 +196,6 @@ new class extends Component {
                                 Foto Profil
                             </label>
 
-                            <!-- Current Image Display -->
                             @if($currentImagePath && !$image)
                                 <div class="mt-2 mb-3">
                                     <div class="relative inline-block">
@@ -234,7 +217,6 @@ new class extends Component {
                             </p>
                             @error('image') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
 
-                            <!-- JavaScript Preview for new image -->
                             <div id="jsEditPreview" class="mt-2 hidden">
                                 <div class="relative inline-block">
                                     <img id="previewEditImg" src="" alt="Preview" class="w-32 h-32 object-cover rounded-lg border-2 border-green-300 shadow-sm">
@@ -249,7 +231,6 @@ new class extends Component {
                                 <p class="text-xs text-green-600 mt-1">Foto baru yang akan digunakan. Click × untuk membatalkan.</p>
                             </div>
 
-                            <!-- Livewire Preview -->
                             @if ($image)
                                 <div class="mt-2">
                                     <img src="{{ $image->temporaryUrl() }}" alt="Server Preview"
@@ -257,38 +238,6 @@ new class extends Component {
                                     <p class="text-xs text-green-600 mt-1">✓ File berhasil diupload ke server</p>
                                 </div>
                             @endif
-                        </div>
-
-                        <!-- Telephone Field -->
-                        <div>
-                            <label for="telephone" class="flex justify-start text-sm font-medium text-gray-700 mb-2">
-                                Nomor Telepon
-                            </label>
-                            <input type="tel" id="telephone" wire:model="telephone"
-                                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                   placeholder="Contoh: 08123456789"/>
-                            @error('telephone') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-                        </div>
-
-                        <!-- Email Field -->
-                        <div>
-                            <label for="email" class="flex justify-start text-sm font-medium text-gray-700 mb-2">
-                                Email
-                            </label>
-                            <input type="email" id="email" wire:model="email"
-                                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                   placeholder="contoh@email.com"/>
-                            @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-                        </div>
-
-                        <!-- Tanggal Lahir Field -->
-                        <div>
-                            <label for="tanggal_lahir" class="flex justify-start text-sm font-medium text-gray-700 mb-2">
-                                Tanggal Lahir
-                            </label>
-                            <input type="date" id="tanggal_lahir" wire:model="tanggal_lahir"
-                                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"/>
-                            @error('tanggal_lahir') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Form Actions -->

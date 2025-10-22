@@ -9,11 +9,8 @@ class UserBaganList extends Model
     protected $table = 'user_bagan_lists';
     protected $fillable = [
         'nama',
-        'jabatan',
-        'departemen',
+        'team',
+        'nik',
         'image_path',
-        'telephone',
-        'email',
-        'tanggal_lahir',
     ];
 }

@@ -11,9 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table("user_bagan_lists", function (Blueprint $table) {
-            $table->string('tanggal_lahir')->nullable()->after('email');
-        });
     }
 
     /**

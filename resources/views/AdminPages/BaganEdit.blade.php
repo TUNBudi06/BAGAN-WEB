@@ -144,55 +144,36 @@
 
                         <!-- Sub Level Section -->
                         <div class="w-full md:w-1/3">
-                            <h3 class="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-900">Sub Level</h3>
-                            <div class="h-64 sm:h-72 lg:h-80 overflow-hidden rounded-lg border border-gray-200">
-                                <div class="h-full overflow-y-auto overscroll-contain">
-                                    <table class="w-full text-sm">
-                                        <thead class="bg-gray-50 sticky top-0">
-                                            <tr>
-                                                <th class="border-b border-gray-200 px-3 py-2 text-left font-medium text-gray-700">ID</th>
-                                                <th class="border-b border-gray-200 px-3 py-2 text-left font-medium text-gray-700">Name</th>
-                                                <th class="border-b border-gray-200 px-3 py-2 text-left font-medium text-gray-700">Level</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            @forelse($subLevelList as $index => $subLevel)
-                                                <tr class="hover:bg-gray-50 transition-colors">
-                                                    <td class="px-3 py-2 text-gray-900 font-medium">{{ $index }}</td>
-                                                    <td class="px-3 py-2 text-gray-700">
-                                                        <div class="truncate">{{ $subLevel->name }}</div>
-                                                        @if($subLevel->description)
-                                                            <div class="text-xs text-gray-500 mt-1 truncate">{{ $subLevel->description }}</div>
-                                                        @endif
-                                                    </td>
-                                                    <td class="px-3 py-2 text-gray-700">{{ $subLevel->level_id }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="3" class="px-3 py-8 text-center text-gray-500">
-                                                        <div class="flex flex-col items-center">
-                                                            <svg class="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                                                            </svg>
-                                                            <p class="text-sm">Belum ada sub level</p>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <livewire:bagan.sublevelmanage :idData="$id"/>
                         </div>
                     </div>
                 </div>
 
                 <!-- Full Width Content Area -->
-                <div class="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 min-h-[24rem]">
+                <div class="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 min-h-[24rem] mb-3">
                     <livewire:bagan.linkchartbindingvolt :idData="$id"/>
+                </div>
+
+                <!-- Full Width Content Area -->
+                <div class="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 min-h-[24rem] mb-3">
+                    <livewire:bagan.slinkchartbindvolt :idData="$id"/>
+                </div>
+
+                <!-- Full Width Content Area -->
+                <div class="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 min-h-[24rem] mb-3">
+                    <livewire:bagan.clinkchartbindvolt :idData="$id"/>
+                </div>
+
+                <!-- Full Width Content Area -->
+                <div class="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 min-h-[24rem] mb-3">
+                    <livewire:bagan.dotlinkchartbindvolt :idData="$id"/>
+                </div>
+
+                <!-- Full Width Content Area -->
+                <div class="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-200 min-h-[24rem] mb-3">
+                    <livewire:bagan.chartviewtemplate :idData="$id"/>
                 </div>
             </main>
         </div>
     </div>
-
 @endsection
