@@ -42,4 +42,9 @@ class AdminController extends Controller
         }
         return view('AdminPages.BaganEdit',['id'=>$id,'templateList'=>$templateList,'typeList'=>$typeList,'subLevelList'=>$subLevelList]);
     }
+
+    public function UserSettings()
+    {
+        return view('AdminPages.UserSettings');
+    }
 }
