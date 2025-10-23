@@ -2,191 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\BaganList;
-use App\Models\templateBagan;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\UserBaganList;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class dataMember extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::insert([
-            'name' => 'Admin',
-            'username' => 'admin',
-            'password' => bcrypt('admin123'),
-        ]);
-
-        templateBagan::insert([
-            // Card entries
+        UserBaganList::insert(
             [
-                'name' => 'Card 1',
-                'template' => 'olivia',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 2',
-                'template' => 'diva',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 3',
-                'template' => 'mila',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 4',
-                'template' => 'polina',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 5',
-                'template' => 'mery',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 6',
-                'template' => 'rony',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 7',
-                'template' => 'belinda',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 8',
-                'template' => 'ula',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 9',
-                'template' => 'ana',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 10',
-                'template' => 'isla',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Card 11',
-                'template' => 'deborah',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Departemen Banner Biru',
-                'template' => 'departemen-banner-biru',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Departemen Banner Hijau',
-                'template' => 'departemen-banner-hijau',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'Departemen Banner Merah',
-                'template' => 'departemen-banner-merah',
-                'type' => 'card',
-            ],
-            // Type entries - semuanya di template column
-            [
-                'name' => 'group (1 column)',
-                'template' => 'group-1',
-                'type' => 'card',
-            ],[
-                'name' => 'group (2 column)',
-                'template' => 'group-2',
-                'type' => 'card',
-            ],[
-                'name' => 'group (3 column)',
-                'template' => 'group-3',
-                'type' => 'card',
-            ],[
-                'name' => 'group (4 column)',
-                'template' => 'group-4',
-                'type' => 'card',
-            ],[
-                'name' => 'group (5 column)',
-                'template' => 'group-5',
-                'type' => 'card',
-            ],
-            [
-                'name' => 'base',
-                'template' => 'base',
-                'type' => 'type',
-            ],
-            [
-                'name' => 'assistant',
-                'template' => 'assistant',
-                'type' => 'type',
-            ],
-            [
-                'name' => 'partner',
-                'template' => 'partner',
-                'type' => 'type',
-            ],[
-                'name' => 'left-partner',
-                'template' => 'left-partner',
-                'type' => 'type',
-            ],[
-                'name' => 'right-partner',
-                'template' => 'right-partner',
-                'type' => 'type',
-            ],
-        ]);
-
-        BaganList::insert([
-            'name' => 'Bagan Organisasi Perusahaan',
-        ]);
-
-        UserBaganList::insert([
-            ['nama' => 'Mulyono', 'nik' => '130203', 'team' => 'Assembling'],
-            ['nama' => 'Ahmad Fatoni', 'nik' => '130204', 'team' => 'Assembling'],
-            ['nama' => 'Dwi Santosa', 'nik' => '130207', 'team' => 'Assembling'],
-            ['nama' => 'Ahmad Saiful Huda', 'nik' => '130811', 'team' => 'DST'],
-            ['nama' => 'Edi Suwanto', 'nik' => '130812', 'team' => 'Painting'],
-            ['nama' => 'Aseptian Ridho Ardiansyah', 'nik' => '131125', 'team' => 'Assembling'],
-            ['nama' => 'Ismail Hidayatullah', 'nik' => '140103', 'team' => 'DST'],
-            ['nama' => 'Moch Andrean', 'nik' => '140104', 'team' => 'DST'],
-            ['nama' => 'Tomi Yulianto', 'nik' => '140106', 'team' => 'Assembling'],
-            ['nama' => 'Artha Rohman Syaid', 'nik' => '140314', 'team' => 'Painting'],
-            ['nama' => 'Achmad Mulyadi', 'nik' => '140315', 'team' => 'DST'],
-            ['nama' => 'M Nur Kholis', 'nik' => '140316', 'team' => 'Assembling'],
-            ['nama' => 'Muhammad Iksan Arif', 'nik' => '140317', 'team' => 'Assembling'],
-            ['nama' => 'Eko Agus Prasetyo', 'nik' => '140421', 'team' => 'Assembling'],
-            ['nama' => 'Sasputro', 'nik' => '140422', 'team' => 'Assembling'],
-            ['nama' => 'Slamet Prayugo', 'nik' => '141030', 'team' => 'Painting'],
-            ['nama' => 'Umri Udin', 'nik' => '141031', 'team' => 'Assembling'],
-            ['nama' => 'Muhammad Toyib', 'nik' => '141137', 'team' => 'Painting'],
-            ['nama' => 'Chafid Zulkifli', 'nik' => '141138', 'team' => 'Assembling'],
-            ['nama' => 'Akhmad Afif Fauqi', 'nik' => '150102', 'team' => 'Assembling'],
-            ['nama' => 'Slamet Supriono', 'nik' => '150103', 'team' => 'Assembling'],
-            ['nama' => 'MKH Riyanto', 'nik' => '150106', 'team' => 'DST'],
-            ['nama' => 'Edi Sutikno', 'nik' => '150107', 'team' => 'Painting'],
-            ['nama' => 'Dwi Jatmiko', 'nik' => '150109', 'team' => 'Painting'],
-            ['nama' => 'Mahardika Angga Pratama', 'nik' => '150421', 'team' => 'Assembling'],
-            ['nama' => 'M. Yahya', 'nik' => '150422', 'team' => 'Assembling'],
-            ['nama' => 'Achmad Busiri', 'nik' => '150423', 'team' => 'Assembling'],
-            ['nama' => 'Mochammad Syaiful Arifin', 'nik' => '150525', 'team' => 'Assembling'],
-            ['nama' => 'Ario Susilo', 'nik' => '150527', 'team' => 'Painting'],
-            ['nama' => 'Moh. Nasrullah', 'nik' => '150528', 'team' => 'Assembling'],
-            ['nama' => 'Muhammad Fais Alqurni', 'nik' => '150529', 'team' => 'Painting'],
-            ['nama' => 'Rizky Riswanto', 'nik' => '150532', 'team' => 'Assembling'],
-            ['nama' => 'Ahmad Muamal Fajri', 'nik' => '150635', 'team' => 'Painting'],
-            ['nama' => 'Mochamad Cholilullah', 'nik' => '150636', 'team' => 'Assembling'],
-            ['nama' => 'Aries Hadi Wijaya', 'nik' => '150637', 'team' => 'Painting'],
-            ['nama' => 'Anang Kosim', 'nik' => '150639', 'team' => 'Assembling'],
-            ['nama' => 'Siswo Ariyanto', 'nik' => '150640', 'team' => 'DST'],
-            ['nama' => 'Imam Syafi\'i', 'nik' => '150641', 'team' => 'Assembling'],
-            ['nama' => 'Dodi Zakaria', 'nik' => '150743', 'team' => 'Painting'],
                 ['nama' => 'Dede Faisal Ramadan', 'nik' => '150745', 'team' => 'DST'],
                 ['nama' => 'Agung Sutrisno', 'nik' => '150848', 'team' => 'Assembling'],
                 ['nama' => 'Muhammad Irhamni', 'nik' => '150849', 'team' => 'Assembling'],
@@ -296,7 +124,7 @@ class DatabaseSeeder extends Seeder
                 ['nama' => 'Maya Nur Ayu Fitriani', 'nik' => '251015', 'team' => 'Assembling'],
                 ['nama' => 'Manda Dwi Novitasari', 'nik' => '251016', 'team' => 'Assembling'],
                 ['nama' => 'Muhammad Agus Arif Setiyo Budi', 'nik' => '251017', 'team' => 'DST'],
-        ]
+            ]
     );
     }
 }

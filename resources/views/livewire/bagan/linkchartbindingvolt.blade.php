@@ -42,7 +42,7 @@ new class extends Component {
     }
 
     public function getUserBaganList(){
-        $this->userBaganList = \App\Models\UserBaganList::all();
+        $this->userBaganList = \App\Models\UserBaganList::orderBy('nama', 'asc')->get();
     }
 
     public function getTemplateBaganList(){
@@ -68,6 +68,7 @@ new class extends Component {
     public function addLinkChartBindingVolt(){
         $this->resetForm();
         $this->isEditMode = false;
+        $this->chart_id = $this->linkList->max('chart_id') + 1;
         $this->isModalOpen = true;
     }
 
@@ -187,6 +188,8 @@ new class extends Component {
         $this->type = 'text';
         $this->user_id = '';
         $this->name = '';
+        $this->nik = '';
+        $this->team = '';
         $this->label = '';
         $this->template_bagan_id = '';
         $this->sub_level_id = '';
@@ -270,7 +273,7 @@ new class extends Component {
                                     <!-- User ID -->
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Select User</label>
-                                        <select wire:model.live="user_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <select id="select2Form" wire:model.live="user_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                             <option value="">-- Select User --</option>
                                             @foreach($this->userBaganList as $user)
                                                 <option value="{{ $user->id }}">{{ $user->nama }} (NIK: {{ $user->nik }}) - {{ $user->team }}</option>
@@ -390,12 +393,16 @@ new class extends Component {
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PPID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STPID</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIK</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Label</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Template</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Level</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Node Type</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
@@ -407,6 +414,12 @@ new class extends Component {
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {{ $link->chart_pid ?: '-' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $link->chart_ppid ?: '-' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $link->chart_stpid ?: '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $link->type == 'user' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
@@ -440,6 +453,12 @@ new class extends Component {
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {{ $link->getTemplateBagan ? $link->getTemplateBagan->name : '-' }}
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $link->getSubLevel ? $link->getSubLevel->name : '-' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $link->getNodeType ? $link->getNodeType->name : '-' }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <button wire:click="editLinkChart({{ $link->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
                                     <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -457,7 +476,7 @@ new class extends Component {
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-6 py-4 text-center text-sm text-gray-500">
+                            <td colspan="13" class="px-6 py-4 text-center text-sm text-gray-500">
                                 No link charts found. Click "Add New Link Chart" to create one.
                             </td>
                         </tr>
@@ -467,3 +486,10 @@ new class extends Component {
         </div>
     </div>
 </div>
+
+@assets
+<link href="{{asset("js/select2/select2.min.css")}}" rel="stylesheet" />
+@endassets
+@pushonce('scripts-def')
+    <script src="{{asset('js/select2/select2.min.js')}}"></script>
+@endpushonce

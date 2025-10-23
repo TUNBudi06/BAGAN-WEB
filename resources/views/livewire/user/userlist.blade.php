@@ -19,7 +19,7 @@ new class extends Component {
     #[Validate(['required', 'string', 'max:50', 'unique:user_bagan_lists,nik'])]
     public string $nik = "";
 
-    #[Validate(['nullable', 'image', 'max:2048','extensions:jpg,jpeg,png,gif'])]
+    #[Validate(['nullable', 'image', 'max:20480','extensions:jpg,jpeg,png,gif'])]
     public $image;
 
     public function mount(): void

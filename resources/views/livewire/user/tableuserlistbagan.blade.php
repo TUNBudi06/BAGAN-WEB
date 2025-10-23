@@ -120,7 +120,7 @@ new class extends Component {
                             </span>
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                            {{ $user->created_at->format('d/m/Y H:i') }}
+                            {{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : 'N/A' }}
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">
                             <div class="flex space-x-2">
@@ -183,7 +183,7 @@ new class extends Component {
                 "previous": "Sebelumnya"
             }
         },
-        order: [[0, 'desc']],
+        order: [[3, 'asc']],
         columnDefs: [
             {
                 targets: [1, 6], // Foto and Aksi columns

@@ -20,7 +20,7 @@ new class extends Component {
 
     public string $nik = "";
 
-    #[Validate(['nullable', 'image', 'max:2048','extensions:jpg,jpeg,png,gif'])]
+    #[Validate(['nullable', 'image', 'max:20480','extensions:jpg,jpeg,png,gif'])]
     public $image;
 
     public ?string $currentImagePath = null;

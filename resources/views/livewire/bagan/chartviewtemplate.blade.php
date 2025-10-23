@@ -30,7 +30,7 @@ new class extends Component {
     public function loadChartData()
     {
         if ($this->bagan_id) {
-            $this->nodes = LinkChartEmbed::with(["getSubLevel","getTemplateBagan","getNodeType"])->where('bagan_list_id', $this->bagan_id)->get()->toArray();
+            $this->nodes = LinkChartEmbed::with(["getSubLevel","getTemplateBagan","getNodeType","user"])->where('bagan_list_id', $this->bagan_id)->get()->toArray();
 
 
 
@@ -178,8 +178,9 @@ new class extends Component {
                 field_0: "name",
                 field_1: "nik",
                 field_2: "team",
-
+                link_field_0: "label",
             };
+            option.orientation = OrgChart.orientation.top;
 
             function pdfPreview(){
                 chartInstance.pdfPreviewUI.show({
@@ -282,14 +283,16 @@ new class extends Component {
                     if (node.phone) temp.phone = node.phone;
 
                     // Convert image to base64 for PDF export
-                    if (node.img) {
-                        const imageUrl = "{{ asset('storage') }}/" + node.img;
-                        try {
-                            temp.img = await imageToBase64(imageUrl);
-                        } catch (error) {
-                            console.warn('Failed to load image:', imageUrl, error);
-                            // Fallback to original URL if conversion fails
-                            temp.img = imageUrl;
+                    if(node.user) {
+                        if (node.user.image_path) {
+                            const imageUrl = "{{ asset('storage') }}/" + node.user.image_path;
+                            try {
+                                temp.img = await imageToBase64(imageUrl);
+                            } catch (error) {
+                                console.warn('Failed to load image:', imageUrl, error);
+                                // Fallback to original URL if conversion fails
+                                temp.img = imageUrl;
+                            }
                         }
                     }
 
