@@ -226,85 +226,125 @@ new class extends Component {
             const clinks = @json($clinks);
             console.log('Loading chart data...', nodesData);
 
-            // Function to convert image to base64
+            // Cache for base64 images to avoid re-converting
+            const imageCache = new Map();
+
+            // Optimized function to convert image to base64 with compression
             function imageToBase64(url) {
-                return new Promise((resolve, reject) => {
-                    fetch(url)
-                        .then(res => res.blob())
-                        .then(blob => {
-                            const reader = new FileReader();
-                            reader.onloadend = () => resolve(reader.result);
-                            reader.onerror = reject;
-                            reader.readAsDataURL(blob);
-                        })
-                        .catch(reject);
+                // Return cached version if available
+                if (imageCache.has(url)) {
+                    return Promise.resolve(imageCache.get(url));
+                }
+
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.crossOrigin = 'Anonymous';
+
+                    img.onload = function() {
+                        try {
+                            const canvas = document.createElement('canvas');
+
+                            // Optimize size - resize large images to max 150x150
+                            const maxSize = 150;
+                            let width = img.width;
+                            let height = img.height;
+
+                            if (width > maxSize || height > maxSize) {
+                                const ratio = Math.min(maxSize / width, maxSize / height);
+                                width = Math.floor(width * ratio);
+                                height = Math.floor(height * ratio);
+                            }
+
+                            canvas.width = width;
+                            canvas.height = height;
+
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            // Use JPEG with 80% quality for smaller file size
+                            const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+
+                            // Cache the result
+                            imageCache.set(url, dataURL);
+                            resolve(dataURL);
+                        } catch (error) {
+                            console.warn('Failed to convert image:', url, error);
+                            resolve(url); // Fallback to URL
+                        }
+                    };
+
+                    img.onerror = function() {
+                        console.warn('Image load error:', url);
+                        resolve(url); // Fallback to URL
+                    };
+
+                    img.src = url;
                 });
             }
 
-            // Process nodes and convert images to base64
-            async function processNodes() {
+            // Process nodes in batches for better performance
+            async function processNodesInBatches() {
+                const BATCH_SIZE = 10; // Process 10 images at a time
                 const processedNodes = [];
 
-                for (const node of nodesData) {
-                    let temp = {
-                        'id': node.chart_id,
-                        'tags': [],
-                    }
-                    if (node.chart_pid) {
-                        temp.pid = node.chart_pid;
-                    }
-                    if (node.chart_stpid) {
-                        temp.stpid = node.chart_stpid;
-                    }
-                    if (node.chart_ppid) {
-                        temp.ppid = node.chart_ppid;
-                    }
+                console.log(`Processing ${nodesData.length} nodes in batches of ${BATCH_SIZE}...`);
 
-                    if (node.name) {
-                        temp.name = node.name;
-                    }
+                for (let i = 0; i < nodesData.length; i += BATCH_SIZE) {
+                    const batch = nodesData.slice(i, i + BATCH_SIZE);
 
-                    if (node.get_template_bagan && node.get_template_bagan.template) {
-                        temp.tags.push(node.get_template_bagan.name);
-                    }
+                    const batchPromises = batch.map(async (node) => {
+                        let temp = {
+                            'id': node.chart_id,
+                            'tags': [],
+                        };
 
-                    if (node.get_node_type && node.get_node_type.name) {
-                        temp.tags.push(node.get_node_type.template);
-                    }
+                        if (node.chart_pid) temp.pid = node.chart_pid;
+                        if (node.chart_stpid) temp.stpid = node.chart_stpid;
+                        if (node.chart_ppid) temp.ppid = node.chart_ppid;
+                        if (node.name) temp.name = node.name;
 
-                    if (node.get_sub_level && node.get_sub_level.name) {
-                        temp.tags.push(node.get_sub_level.name);
-                    }
-
-                    // Add other node properties
-                    if (node.label) temp.label = node.label;
-                    if (node.nik) temp.nik = node.nik;
-                    if (node.team) temp.team = node.team;
-                    if (node.phone) temp.phone = node.phone;
-
-                    // Convert image to base64 for PDF export
-                    if(node.user) {
-                        if (node.user.image_path) {
-                            const imageUrl = "{{ asset('storage') }}/" + node.user.image_path;
-                            try {
-                                temp.img = await imageToBase64(imageUrl);
-                            } catch (error) {
-                                console.warn('Failed to load image:', imageUrl, error);
-                                // Fallback to original URL if conversion fails
-                                temp.img = imageUrl;
-                            }
+                        if (node.get_template_bagan && node.get_template_bagan.template) {
+                            temp.tags.push(node.get_template_bagan.name);
                         }
-                    }
 
-                    processedNodes.push(temp);
+                        if (node.get_node_type && node.get_node_type.name) {
+                            temp.tags.push(node.get_node_type.template);
+                        }
+
+                        if (node.get_sub_level && node.get_sub_level.name) {
+                            temp.tags.push(node.get_sub_level.name);
+                        }
+
+                        if (node.label) temp.label = node.label;
+                        if (node.nik) temp.nik = node.nik;
+                        if (node.team) temp.team = node.team;
+                        if (node.phone) temp.phone = node.phone;
+
+                        // Convert image to base64 data URI
+                        if (node.user && node.user.image_path) {
+                            const imageUrl = "{{ asset('storage') }}/" + node.user.image_path;
+                            temp.img = await imageToBase64(imageUrl);
+                        }
+
+                        return temp;
+                    });
+
+                    const batchResults = await Promise.all(batchPromises);
+                    processedNodes.push(...batchResults);
+
+                    // Progress feedback
+                    const progress = Math.min(100, Math.round((processedNodes.length / nodesData.length) * 100));
+                    console.log(`Progress: ${progress}% (${processedNodes.length}/${nodesData.length})`);
                 }
 
                 return processedNodes;
             }
 
-            // Load chart with processed nodes
-            processNodes().then(processedNodes => {
+            // Load chart with base64 images
+            console.log('Converting images to base64...');
+            processNodesInBatches().then(processedNodes => {
                 nodes = processedNodes;
+                console.log('All images converted successfully!');
                 console.log('Nodes:', nodes);
                 console.log('Slinks:', slinks);
                 console.log('Clinks:', clinks);
@@ -326,6 +366,8 @@ new class extends Component {
                         chartInstance.addClink(clink.from, clink.to, clink.label, clink.template);
                     });
                 }
+            }).catch(error => {
+                console.error('Error processing nodes:', error);
             });
 
             // Dotlinks already configured in option.links before chart initialization
