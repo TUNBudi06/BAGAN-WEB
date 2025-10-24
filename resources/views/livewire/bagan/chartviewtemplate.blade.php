@@ -57,6 +57,24 @@ new class extends Component {
 }; ?>
 
 <div>
+    <!-- Loading Progress Indicator -->
+    <div id="chartLoadingOverlay" style="display: none; position: relative; width: 100%; background: #f3f4f6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <div class="text-center">
+            <div class="mb-2">
+                <svg class="animate-spin h-8 w-8 mx-auto text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800" id="loadingTitle">Loading Chart...</h3>
+            <p class="text-sm text-gray-600 mt-1" id="loadingMessage">Preparing data...</p>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                <div id="loadingProgressBar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2" id="loadingPercentage">0%</p>
+        </div>
+    </div>
+
     <div id="TreeOrganizationChartDiv" style="width: 100%; height: 600px;"></div>
 </div>
 
@@ -229,6 +247,35 @@ new class extends Component {
             // Cache for base64 images to avoid re-converting
             const imageCache = new Map();
 
+            // Function to update loading progress
+            function updateLoadingProgress(current, total, message = '') {
+                const overlay = document.getElementById('chartLoadingOverlay');
+                const progressBar = document.getElementById('loadingProgressBar');
+                const percentage = document.getElementById('loadingPercentage');
+                const loadingMessage = document.getElementById('loadingMessage');
+
+                if (overlay && progressBar && percentage) {
+                    overlay.style.display = 'block';
+                    const percent = Math.round((current / total) * 100);
+                    progressBar.style.width = percent + '%';
+                    percentage.textContent = percent + '%';
+
+                    if (message) {
+                        loadingMessage.textContent = message;
+                    }
+                }
+            }
+
+            // Function to hide loading progress
+            function hideLoadingProgress() {
+                const overlay = document.getElementById('chartLoadingOverlay');
+                if (overlay) {
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 500);
+                }
+            }
+
             // Optimized function to convert image to base64 with compression
             function imageToBase64(url) {
                 // Return cached version if available
@@ -286,8 +333,12 @@ new class extends Component {
             async function processNodesInBatches() {
                 const BATCH_SIZE = 10; // Process 10 images at a time
                 const processedNodes = [];
+                const totalNodes = nodesData.length;
 
-                console.log(`Processing ${nodesData.length} nodes in batches of ${BATCH_SIZE}...`);
+                console.log(`Processing ${totalNodes} nodes in batches of ${BATCH_SIZE}...`);
+
+                // Show initial loading
+                updateLoadingProgress(0, totalNodes, `Processing 0 of ${totalNodes} nodes...`);
 
                 for (let i = 0; i < nodesData.length; i += BATCH_SIZE) {
                     const batch = nodesData.slice(i, i + BATCH_SIZE);
@@ -332,9 +383,19 @@ new class extends Component {
                     const batchResults = await Promise.all(batchPromises);
                     processedNodes.push(...batchResults);
 
-                    // Progress feedback
-                    const progress = Math.min(100, Math.round((processedNodes.length / nodesData.length) * 100));
-                    console.log(`Progress: ${progress}% (${processedNodes.length}/${nodesData.length})`);
+                    // Update progress after each batch
+                    const currentProgress = processedNodes.length;
+                    updateLoadingProgress(
+                        currentProgress,
+                        totalNodes,
+                        `Processing ${currentProgress} of ${totalNodes} nodes...`
+                    );
+                    console.log(`Progress: ${Math.round((currentProgress / totalNodes) * 100)}% (${currentProgress}/${totalNodes})`);
+
+                    // Allow UI to breathe between batches
+                    if (i + BATCH_SIZE < nodesData.length) {
+                        await new Promise(resolve => setTimeout(resolve, 0));
+                    }
                 }
 
                 return processedNodes;
@@ -344,6 +405,10 @@ new class extends Component {
             console.log('Converting images to base64...');
             processNodesInBatches().then(processedNodes => {
                 nodes = processedNodes;
+
+                // Update to 100% and show completion message
+                updateLoadingProgress(nodesData.length, nodesData.length, 'Chart loaded successfully!');
+
                 console.log('All images converted successfully!');
                 console.log('Nodes:', nodes);
                 console.log('Slinks:', slinks);
@@ -366,8 +431,12 @@ new class extends Component {
                         chartInstance.addClink(clink.from, clink.to, clink.label, clink.template);
                     });
                 }
+
+                // Hide loading overlay after chart is rendered
+                hideLoadingProgress();
             }).catch(error => {
                 console.error('Error processing nodes:', error);
+                hideLoadingProgress();
             });
 
             // Dotlinks already configured in option.links before chart initialization

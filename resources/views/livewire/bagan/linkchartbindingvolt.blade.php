@@ -65,6 +65,17 @@ new class extends Component {
         }
     }
 
+    public function updatedType($value){
+        // Kosongkan semua data user ketika type berubah dari user ke text
+        if($value == 'text'){
+            $this->user_id = '';
+            $this->name = '';
+            $this->nik = '';
+            $this->team = '';
+            $this->image = '';
+        }
+    }
+
     public function addLinkChartBindingVolt(){
         $this->resetForm();
         $this->isEditMode = false;
@@ -387,8 +398,8 @@ new class extends Component {
             </span>
         </button>
 
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200">
+        <div class="overflow-x-auto bg-white shadow-md rounded-lg overflow-y-scroll max-h-[500px]">
+            <table id="linkChartTable" class="min-w-full divide-y divide-gray-200 display">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
@@ -493,3 +504,4 @@ new class extends Component {
 @pushonce('scripts-def')
     <script src="{{asset('js/select2/select2.min.js')}}"></script>
 @endpushonce
+
