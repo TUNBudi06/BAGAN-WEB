@@ -29,7 +29,7 @@ ISEKI (formerly BAGAN-WEB) is a comprehensive organizational chart management sy
 ### Frontend
 - **Tailwind CSS 4**: Utility-first CSS framework
 - **Alpine.js**: Lightweight JavaScript framework
-- **OrgChart.js**: Professional organization chart library
+- **OrgChart.js**: Professional organization chart library (included as static asset)
 - **Vite**: Modern build tool and development server
 - **Lucide Icons**: Beautiful, consistent icon set
 
